@@ -23,5 +23,11 @@ class DanhMuc extends Model
     }
     // cach 3: si dung eloquent
     protected $table = 'danh_mucs';
-    protected $fillable = ['ten_danh_muc','hinh_anh'];
+    protected $fillable = ['ten_danh_muc','hinh_anh','trang_thai',];
+    protected $casts =[
+        'trang_thai' => 'boolean'
+    ];
+    public function sanPhams(){
+        return $this->hasMany(SanPham::class);
+    }
 }

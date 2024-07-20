@@ -53,14 +53,14 @@
     <div class="container">
         <h1 class="mb-4">Thêm Danh Mục</h1>
         <!-- Form thêm danh mục -->
-        <form action="{{ route('danhmuc.update', $danh_mucs->id) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admins.danhmucs.update', $danh_mucs->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="form-group">
                 <label for="ten_danh_muc">Tên Danh Mục</label>
-                <input type="text" class="form-control @error('ten_danh_muc') is-invalid @enderror" id="ten_danh_muc" name="ten_danh_muc"
-                    value="{{ old('ten_danh_muc', $danh_mucs->ten_danh_muc) }}" required>
-                    @error('ten_danh_muc')
+                <input type="text" class="form-control @error('ten_danh_muc') is-invalid @enderror" id="ten_danh_muc"
+                    name="ten_danh_muc" value="{{ old('ten_danh_muc', $danh_mucs->ten_danh_muc) }}" required>
+                @error('ten_danh_muc')
                     <p class="text-danger">{{ $message }}</p>
                 @enderror
             </div>
@@ -79,8 +79,21 @@
                 <label for="new_image" class="form-label">Hình Ảnh Mới:</label>
                 <img id="img_new" src="#" alt="Hình ảnh mới" style="width: 200px; display: none;">
             </div>
+            <div class="mb-3">
+                <label for="trang_thai" class="form-label">Trạng thái:</label>
+                <select class="form-select" id="trang_thai" name="trang_thai">
+                    @if ($danh_mucs->trang_thai == 1)
+                        <option value="1" selected>Hiển thị</option>
+                        <option value="0">Ẩn</option>
+                    @else
+                        <option value="1">Hiển thị</option>
+                        <option value="0" selected>Ẩn</option>
+                    @endif
+                </select>
+
+            </div>
             <button type="submit" class="btn btn-primary">Cập nhật</button>
-            <a href="{{ route('danhmuc.index') }}" class="btn btn-secondary">Quay lại</a>
+            <a href="{{ route('admins.danhmucs.index') }}" class="btn btn-secondary">Quay lại</a>
         </form>
     </div>
 @endsection

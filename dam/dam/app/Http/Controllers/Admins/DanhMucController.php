@@ -25,7 +25,7 @@ class DanhMucController extends Controller
     {
         //
         $title = "Danh sách danh mục";
-        $danh_mucs = $this->danh_mucs->getList();
+        $danh_mucs = DanhMuc::orderByDesc('trang_thai')->get();
         return view('admins.danhmucs.list', compact('danh_mucs', 'title'));
     }
 
@@ -47,27 +47,25 @@ class DanhMucController extends Controller
         //
         //
         if ($request->isMethod('post')) {
-            
+
             $params = $request->post();
             $params = $request->except('_token');
             // Xử lý file hình ảnh
             if ($request->hasFile('hinh_anh')) {
-                $image = $request->file('hinh_anh');
-                $path = $image->store('public/images');
-                $imagePath = basename($path); // Lấy tên file từ đường dẫn lưu trữ
+                $imagePath = $request->file('hinh_anh')->store('images', 'public');
             } else {
                 // Cung cấp tên file mặc định hoặc xử lý lỗi nếu không có ảnh
-                $imagePath = 'default.png'; // Thay đổi nếu cần thiết
+                $imagePath = null; // Thay đổi nếu cần thiết
             }
             $params['hinh_anh'] = $imagePath;
             // Gán ngày tạo cho trường created_at
             $params['created_at'] = Carbon::now();
             // Gán ngày cập nhật cho trường updated_at
             $params['updated_at'] = Carbon::now();
-            $this->danh_mucs->createProduct($params);
-            return redirect()->route('danhmuc.index')->with('thongbao', 'Thêm danh mục thành công');
+            DanhMuc::create($params);
+            return redirect()->route('admins.danhmucs.index')->with('thongbao', 'Thêm danh mục thành công');
         }
-    }   
+    }
 
     /**
      * Display the specified resource.
@@ -86,7 +84,7 @@ class DanhMucController extends Controller
         $title = "Thêm danh mục";
         $danh_mucs = $this->danh_mucs->getDanhMuc($id);
         if (!$danh_mucs) {
-            return redirect()->route('danhmuc.index')->with('error', 'Không tìm thấy khách hàng');
+            return redirect()->route('danhmuc.index')->with('error', 'Không tìm thấy danh mục');
         }
         return view('admins.danhmucs.edit', compact('title', 'danh_mucs'));
     }
@@ -114,7 +112,7 @@ class DanhMucController extends Controller
             // cap nhat du lieu
             // eloquent
             $danhMuc->update($params);
-            return redirect()->route('danhmuc.index')->with('thongbao', 'Cap nhat hinh anh thanh cong');
+            return redirect()->route('admins.danhmucs.index')->with('thongbao', 'Cập nhật danh mục thành công');
         }
     }
 
@@ -123,11 +121,13 @@ class DanhMucController extends Controller
      */
     public function destroy(string $id)
     {
-        // xóa sản phẩm
-        // Tìm sản phẩm theo ID
-        $danhmuc = DB::table('danh_mucs')->where('id', $id)->first();
-        // Xóa danh mục khỏi cơ sở dữ liệu
-        DB::table('danh_mucs')->where('id', $id)->delete();
-        return redirect()->route('danhmuc.index')->with('thongbao', 'Danh mục đã được xóa thành công');
+        // xóa sản phẩm bằng eloquent
+        $danhMuc = DanhMuc::findOrFail($id);
+        $danhMuc->delete();
+        // Kiểm tra xem có hình ảnh không, nếu có thì xóa 
+        if ($danhMuc->hinh_anh && Storage::disk('public')->exists($danhMuc->hinh_anh)) {
+            Storage::disk('public')->delete($danhMuc->hinh_anh);
+        }
+        return redirect()->route('admins.danhmucs.index')->with('thongbao', 'Xóa danh mục thành công');
     }
 }

@@ -23,13 +23,13 @@ class DanhMucRequest extends FormRequest
     {
         return [
             //
-            'ten_danh_muc' => 'required|max:255'
+            'ten_danh_muc' => 'required|max:255',
         ];
     }
     public function messages(): array
     {
         return [
-            'ten_danh_muc.required' => 'Tên danh mục không được để trống'
+            'ten_danh_muc.required' => 'Tên danh mục không được để trống',
         ];
     }
 }

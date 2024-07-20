@@ -19,7 +19,7 @@
             <span class="hide-menu">Home</span>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="/dashboard" aria-expanded="false">
+            <a class="sidebar-link" href="{{ route('admins.dashboard') }}" aria-expanded="false">
               <span>
                 <i class="ti ti-layout-dashboard"></i>
               </span>
@@ -27,7 +27,7 @@
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="{{ route('khachhang.index') }}" aria-expanded="false">
+            <a class="sidebar-link" href="" aria-expanded="false">
               <span>
                 <i class="ti ti-layout-dashboard"></i>
               </span>
@@ -35,7 +35,7 @@
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="{{ route('danhmuc.index') }}" aria-expanded="false">
+            <a class="sidebar-link" href="{{ route('admins.danhmucs.index') }}" aria-expanded="false">
               <span>
                 <i class="ti ti-layout-dashboard"></i>
               </span>
@@ -43,7 +43,7 @@
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="{{ route('sanpham.index') }}" aria-expanded="false">
+            <a class="sidebar-link" href="" aria-expanded="false">
               <span>
                 <i class="ti ti-layout-dashboard"></i>
               </span>

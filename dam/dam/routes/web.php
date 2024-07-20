@@ -34,17 +34,35 @@ Route::get('/', function () {
 // Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // 
 // Route::get('/client', [ClientsHomeController::class, 'index'])->name('client');
-Route::middleware(['auth'])->group(function () {   
+Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [UsersUserController::class, 'show'])->name('profile');
     Route::put('/profile', [UsersUserController::class, 'update'])->name('profile.update');
-   
-    Route::middleware(['auth.admin'])->group(function () {
-        Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
-        Route::resource('khachhang', KhachHangController::class);
-        Route::resource('sanpham', SanPhamController::class);
-        Route::resource('danhmuc', DanhMucController::class);
-    });
+
+    // Route::middleware(['auth.admin'])->group(function () {
+    //     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
+    //     Route::resource('khachhang', KhachHangController::class);
+    //     Route::resource('sanpham', SanPhamController::class);
+    //     Route::resource('danhmuc', DanhMucController::class);
+    // });
 });
 
 Auth::routes();
 Route::get('/home', [ClientsHomeController::class, 'index'])->name('home');
+
+// Route ADMIN
+Route::middleware(['auth', 'auth.admin'])->prefix('admins')
+    ->as('admins.')
+    ->group(function () {
+        Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
+        Route::prefix('danhmucs')
+            ->as('danhmucs.')
+            ->group(function () {
+                Route::get('/', [DanhMucController::class, 'index'])->name('index');
+                Route::get('/create', [DanhMucController::class, 'create'])->name('create');
+                Route::post('/store', [DanhMucController::class, 'store'])->name('store');
+                Route::post('/show/{id}', [DanhMucController::class, 'show'])->name('show');
+                Route::get('/edit/{id}', [DanhMucController::class, 'edit'])->name('edit');
+                Route::put('/update/{id}', [DanhMucController::class, 'update'])->name('update');
+                Route::delete('/delete/{id}', [DanhMucController::class, 'destroy'])->name('destroy');
+            });
+    });

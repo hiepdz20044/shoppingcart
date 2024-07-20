@@ -16,7 +16,10 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
+            $table->string('hinh_anh');
+            $table->string('dia_chi');
             $table->string('password');
+            $table->enum('role', ['Admin', 'User'])->default('User');
             $table->rememberToken();
             $table->timestamps();
         });

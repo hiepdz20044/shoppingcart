@@ -33,14 +33,45 @@ class SanPham extends Model
     }
     public function updateProduct($id, $datas)
     {
-        DB::table('san_phams')->where('id',$id)->update($datas);
+        DB::table('san_phams')->where('id', $id)->update($datas);
     }
     public function deleteProduct($id)
     {
-        DB::table('san_phams')->where('id',$id)->delete();
+        DB::table('san_phams')->where('id', $id)->delete();
     }
     // cach 3: si dung eloquent
     use SoftDeletes;
     protected $table = 'san_phams';
-    protected $fillable = ['ten_san_pham', 'hinh_anh',  'gia', 'so_luong', 'id_danh_muc','trang_thai'];
+    protected $fillable = [
+        'ma_san_pham',
+        'ten_san_pham',
+        'hinh_anh',
+        'gia',
+        'gia_khuyen_mai',
+        'mo_ta_ngan',
+        'noi_dung',
+        'so_luong',
+        'luot_xem',
+        'ngay_nhap',
+        'danh_muc_id',
+        'trang_thai',
+        'moi',
+        'hot',
+        'hot_deal',
+        'show_home',
+    ];
+    protected $casts = [
+        'trang_thai' => 'boolean',
+        'moi' => 'boolean',
+        'hot' => 'boolean',
+        'hot_deal' => 'boolean',
+        'show_home' => 'boolean',
+    ];
+    public function danhMuc(){
+        return $this->belongsTo(DanhMuc::class);
+    }
+    public function hinhAnhSanPham()
+    {
+        return $this->hasMany(HinhAnhSanPham::class);
+    }
 }
