@@ -30,18 +30,18 @@ class SanPhamController extends Controller
         // su dung eloquent
         $title = 'Danh sách sản phẩm';
         // lay du lieu cu form tim kiem
-        $search = $request->input('search');
-        $searchTrangThai= $request->input('searchTrangThai');
-        $listSanPham = SanPham::query()
-            ->when($search, function ($query, $search) {
-                return $query->where("ten_san_pham", "like", "%{$search}%");
-            })
-            ->when($searchTrangThai !== null, function ($query) use ($searchTrangThai) {
-                return $query->where("trang_thai", "=", $searchTrangThai);
-            })
-            ->orderByDesc('id')->paginate(3);
+        // $search = $request->input('search');
+        // $searchTrangThai= $request->input('searchTrangThai');
+        $listSanPham = SanPham::orderByDesc('trang_thai')->get();
+        // ->when($search, function ($query, $search) {
+        //     return $query->where("ten_san_pham", "like", "%{$search}%");
+        // })
+        // ->when($searchTrangThai !== null, function ($query) use ($searchTrangThai) {
+        //     return $query->where("trang_thai", "=", $searchTrangThai);
+        // })
+        // ->orderByDesc('id')->paginate(3);
         return view('admins.sanphams.list', compact('title', 'listSanPham'));
-}
+    }
 
 
     /**
@@ -51,7 +51,7 @@ class SanPhamController extends Controller
     {
         //
         $title = 'Thêm sản phẩm';
-        $listSanPham = $this->san_phams->getList();
+        $listSanPham = SanPham::query()->get();
         // Lấy danh sách các danh mục
         $danhMucs = DB::table('danh_mucs')->get();
         return view('admins.sanphams.add', compact('title', 'listSanPham', 'danhMucs'));
@@ -66,6 +66,11 @@ class SanPhamController extends Controller
         if ($request->isMethod('post')) {
             $params = $request->post();
             $params = $request->except('_token');
+            // chuyen doi gia tri checkbox thanh boolean
+            $params['moi'] = $request->has('moi') ? 1 : 0;
+            $params['hot'] = $request->has('hot') ? 1 : 0;
+            $params['hot_deal'] = $request->has('hot_deal') ? 1 : 0;
+            $params['show_home'] = $request->has('show_home') ? 1 : 0;
             // Xử lý file hình ảnh
             if ($request->hasFile('hinh_anh')) {
                 $imagePath = $request->file('hinh_anh')->store('images', 'public');
@@ -74,13 +79,21 @@ class SanPhamController extends Controller
                 $imagePath = 'default.png'; // Thay đổi nếu cần thiết
             }
             $params['hinh_anh'] = $imagePath;
-            // Gán ngày tạo cho trường created_at
-            $params['created_at'] = Carbon::now();
-            // Gán ngày cập nhật cho trường updated_at
-            $params['updated_at'] = Carbon::now();
-            $this->san_phams->createProduct($params);
-            return redirect()->route('sanpham.index')->with('thongbao', 'Thêm sản phẩm thành công');
+            $sanPham = SanPham::query()->create($params);
+            $sanPhamID = $sanPham->id;
         }
+        if ($request->hasFile('list_hinh_anh')) {
+            foreach ($request->File('list_hinh_anh') as $image) {
+                if ($image) {
+                    $path = $image->store('images/id' . $sanPhamID, 'public');
+                    $sanPham->hinhAnhSanPham()->create([
+                        'san_pham_id' => $sanPhamID,
+                        'hinh_anh' => $path,
+                    ]);
+                }
+            }
+        }
+        return redirect()->route('admins.sanphams.index')->with('thongbao', 'Thêm sản phẩm thành công');
     }
 
     /**
@@ -156,7 +169,7 @@ class SanPhamController extends Controller
             // su dung eloquent
             $sanPham = SanPham::findOrFail($id);
             if ($sanPham) {
-            // su dung query builder
+                // su dung query builder
                 // $this->san_phams->deleteProduct($id);
                 // su dung eloquent
                 $sanPham->delete();

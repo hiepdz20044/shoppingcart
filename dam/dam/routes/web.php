@@ -54,6 +54,7 @@ Route::middleware(['auth', 'auth.admin'])->prefix('admins')
     ->as('admins.')
     ->group(function () {
         Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
+        // route danh muc
         Route::prefix('danhmucs')
             ->as('danhmucs.')
             ->group(function () {
@@ -64,5 +65,29 @@ Route::middleware(['auth', 'auth.admin'])->prefix('admins')
                 Route::get('/edit/{id}', [DanhMucController::class, 'edit'])->name('edit');
                 Route::put('/update/{id}', [DanhMucController::class, 'update'])->name('update');
                 Route::delete('/delete/{id}', [DanhMucController::class, 'destroy'])->name('destroy');
+            });
+            // Route san pham
+            Route::prefix('sanphams')
+            ->as('sanphams.')
+            ->group(function () {
+                Route::get('/', [SanPhamController::class, 'index'])->name('index');
+                Route::get('/create', [SanPhamController::class, 'create'])->name('create');
+                Route::post('/store', [SanPhamController::class, 'store'])->name('store');
+                Route::post('/show/{id}', [SanPhamController::class, 'show'])->name('show');
+                Route::get('/edit/{id}', [SanPhamController::class, 'edit'])->name('edit');
+                Route::put('/update/{id}', [SanPhamController::class, 'update'])->name('update');
+                Route::delete('/delete/{id}', [SanPhamController::class, 'destroy'])->name('destroy');
+            });
+            // Route khach hang
+            Route::prefix('khachhangs')
+            ->as('khachhangs.')
+            ->group(function () {
+                Route::get('/', [KhachHangController::class, 'index'])->name('index');
+                Route::get('/create', [KhachHangController::class, 'create'])->name('create');
+                Route::post('/store', [KhachHangController::class, 'store'])->name('store');
+                Route::post('/show/{id}', [KhachHangController::class, 'show'])->name('show');
+                Route::get('/edit/{id}', [KhachHangController::class, 'edit'])->name('edit');
+                Route::put('/update/{id}', [KhachHangController::class, 'update'])->name('update');
+                Route::delete('/delete/{id}', [KhachHangController::class, 'destroy'])->name('destroy');
             });
     });
