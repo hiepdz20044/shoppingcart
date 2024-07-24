@@ -59,9 +59,6 @@ class DanhMucController extends Controller
             }
             $params['hinh_anh'] = $imagePath;
             // Gán ngày tạo cho trường created_at
-            $params['created_at'] = Carbon::now();
-            // Gán ngày cập nhật cho trường updated_at
-            $params['updated_at'] = Carbon::now();
             DanhMuc::create($params);
             return redirect()->route('admins.danhmucs.index')->with('thongbao', 'Thêm danh mục thành công');
         }
