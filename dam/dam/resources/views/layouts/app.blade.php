@@ -1,96 +1,44 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
+
+<!-- Mirrored from risingtheme.com/html/demo-suruchi-v1/suruchi/index-2.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 24 Jul 2024 15:48:50 GMT -->
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <title>Suruchi - Fashion eCommerce HTML Template</title>
+  <meta name="description" content="Morden Bootstrap HTML5 Template">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" type="image/x-icon" href="{{ asset('assets/clients/img/favicon.ico') }}">
+    
+   <!-- ======= All CSS Plugins here ======== -->
+  <link rel="stylesheet" href="{{ asset('assets/clients/css/plugins/swiper-bundle.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('assets/clients/css/plugins/glightbox.min.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap" rel="stylesheet">
 
-    <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+  <!-- Plugin css -->
+  <link rel="stylesheet" href="{{ asset('assets/clients/css/vendor/bootstrap.min.css') }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
-
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
-    <link rel="shortcut icon" type="image/png" href="{{ asset('assets/admins/images/logos/favicon.png') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/admins/css/styles.min.css') }}">
-    @yield('css')
-    <!-- Scripts -->
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+  <!-- Custom Style CSS -->
+  <link rel="stylesheet" href="{{ asset('assets/clients/css/style.css') }}">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
 <body>
-    <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
-                <a class="navbar-brand" href="{{ route('home') }}">
-                    {{-- {{ config('app.name', 'Laravel') }} --}}
-
-                    <img width="150px" src="{{ asset('assets/clients/img/logo/GroupThree.png') }}" alt="logo-img">
-
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto">
-
-                    </ul>
-
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ms-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>
-                            @endif
-
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
-                                </a>
-
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                        onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-                        @endguest
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <main class="py-4">
+     <!-- Start header area -->
+        @include('clients.blocks.header')
+        @yield('header')
+        <!-- End header area -->
+        <main class="color-scheme-2 main__content_wrapper">
             @yield('content')
         </main>
-    </div>
-    <script src="{{ asset('assets/admins/libs/jquery/dist/jquery.min.js') }}"></script>
-    <script src="{{ asset('assets/admins/js/app.min.js') }}"></script>
-    <script src="{{ asset('assets/admins/libs/apexcharts/dist/apexcharts.min.js') }}"></script>
-    <script src="{{ asset('assets/admins/libs/simplebar/dist/simplebar.js') }}"></script>
-    <script src="{{ asset('assets/admins/js/dashboard.js') }}"></script>
+    <!-- All Script JS Plugins here  -->
+    <script src="{{ asset('assets/clients/js/vendor/popper.js') }}" defer="defer"></script>
+    <script src="{{ asset('assets/clients/js/vendor/bootstrap.min.js') }}" defer="defer"></script>
+    <script src="{{ asset('assets/clients/js/plugins/swiper-bundle.min.js') }}"></script>
+    <script src="{{ asset('assets/clients/js/plugins/glightbox.min.js') }}"></script>
+
+    <!-- Customscript js -->
+    <script src="{{ asset('assets/clients/js/script.js') }}"></script>
 </body>
 
 </html>

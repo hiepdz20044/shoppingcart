@@ -36,7 +36,7 @@
 @section('content')
     <div class="container mt-5">
         <h2 class="mb-4">Danh sách khách hàng</h2>
-        <a href="{{ route('khachhang.create') }}"><button type="submit" class="btn btn-primary">Thêm mới</button> </a>
+        <a href="{{ route('admins.khachhangs.create') }}"><button type="submit" class="btn btn-primary">Thêm mới</button> </a>
         {{-- Hiển thị thông báo --}}
         @if (session('thongbao'))
             <div id="notification" class="alert alert-success" role="alert">
@@ -63,8 +63,9 @@
                     <th>Email</th>
                     <th>Ảnh</th>
                     <th>Địa chỉ</th>
-                    <th>Ngày tạo</th>
-                    <th>Ngày cập nhật</th>
+                    <th>Ngày sinh</th>
+                    <th>Giới tính</th>
+                    <th>Trạng thái</th>
                     <th>Chức năng</th>
                 </tr>
             </thead>
@@ -74,14 +75,15 @@
                         <td>{{ $user->id }}</td>
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
-                        <td><img src="{{ asset('storage/' . $user->hinh_anh) }}" alt="{{ $user->name }}" width="200"
-                                height="300px"> </td>
+                        <td><img src="{{ asset('storage/' . $user->hinh_anh) }}" alt="{{ $user->name }}" width="100"
+                                height="150px"> </td>
                         <td>{{ $user->dia_chi }}</td>
-                        <td>{{ $user->created_at }}</td>
-                        <td>{{ $user->updated_at }}</td>
+                        <td>{{ $user->ngay_sinh }}</td>
+                        <td>{{ $user->gioi_tinh }}</td>
+                        <td>{{ $user->trang_thai == '1' ? 'Đang hoạt động' : 'Dừng hoạt động'}}</td>
                         <td>
-                            <a href="{{ route('khachhang.edit', $user->id) }}" class="btn btn-primary">Sửa</a>
-                            <form action="{{ route('khachhang.destroy', $user->id) }}" method="POST">
+                            <a href="{{ route('admins.khachhangs.edit', $user->id) }}" class="btn btn-primary">Sửa</a>
+                            <form action="{{ route('admins.khachhangs.destroy', $user->id) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger">Xóa</button>

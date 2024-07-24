@@ -25,7 +25,10 @@ class User extends Authenticatable
         'password',
         'dia_chi',
         'hinh_anh',
-        'role',
+        'ngay_sinh',
+        'so_dien_thoai',
+        'gioi_tinh',
+        'trang_thai',
     ];
 
     /**
@@ -45,5 +48,6 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'trang_thai' => 'boolean',
     ];
 }

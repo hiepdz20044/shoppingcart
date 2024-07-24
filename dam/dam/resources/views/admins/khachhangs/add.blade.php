@@ -1,6 +1,5 @@
 @extends('layouts.admin')
 @section('title')
-    {{-- Hien thi du lieu trong blade --}}
     {{ $title }}
 @endsection
 @section('css')
@@ -14,21 +13,17 @@
 @section('js')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Lấy thông báo nếu tồn tại
             var notification = document.getElementById('notification');
-
             if (notification) {
-                // Đặt thời gian hiển thị thông báo là 5 giây (5000 milliseconds)
                 setTimeout(function() {
                     notification.classList.add('fade');
                     setTimeout(function() {
                         notification.style.display = 'none';
-                    }, 150); // Thời gian trễ để đảm bảo hiệu ứng fade-out được hiển thị
+                    }, 150);
                 }, 5000);
             }
         });
-    </script>
-    <script>
+
         function showImage(event) {
             const img_user = document.getElementById('img_user');
             const file = event.target.files[0];
@@ -46,7 +41,7 @@
 @section('content')
     <div class="container mt-5">
         <h2>Thêm mới khách hàng</h2>
-        <form action="{{ route('khachhang.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admins.khachhangs.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="mb-3">
                 <label for="name" class="form-label">Tên khách hàng</label>
@@ -58,7 +53,7 @@
             </div>
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
-                <input type="text" class="form-control @error('email') is-invalid @enderror" id="email"
+                <input type="email" class="form-control @error('email') is-invalid @enderror" id="email"
                     name="email" value="{{ old('email') }}">
                 @error('email')
                     <p class="text-danger">{{ $message }}</p>
@@ -87,11 +82,47 @@
                     <p class="text-danger">{{ $message }}</p>
                 @enderror
             </div>
+            <div class="mb-3">
+                <label for="ngay_sinh" class="form-label">Ngày sinh</label>
+                <input type="date" class="form-control @error('ngay_sinh') is-invalid @enderror" id="ngay_sinh"
+                    name="ngay_sinh" value="{{ old('ngay_sinh') }}">
+                @error('ngay_sinh')
+                    <p class="text-danger">{{ $message }}</p>
+                @enderror
+            </div>
+            <div class="mb-3">
+                <label for="so_dien_thoai" class="form-label">Số điện thoại</label>
+                <input type="text" class="form-control @error('so_dien_thoai') is-invalid @enderror" id="so_dien_thoai" name="so_dien_thoai"
+                    value="{{ old('so_dien_thoai') }}">
+                @error('so_dien_thoai')
+                    <p class="text-danger">{{ $message }}</p>
+                @enderror
+            </div>
+            <div class="mb-3">
+                <label for="gioi_tinh" class="form-label">Giới tính</label>
+                <select id="gioi_tinh" name="gioi_tinh" class="form-select @error('gioi_tinh') is-invalid @enderror">
+                    <option value="Nam" {{ old('gioi_tinh') == 'Nam' ? 'selected' : '' }}>Nam</option>
+                    <option value="Nữ" {{ old('gioi_tinh') == 'Nữ' ? 'selected' : '' }}>Nữ</option>
+                </select>
+                @error('gioi_tinh')
+                    <p class="text-danger">{{ $message }}</p>
+                @enderror
+            </div>
+            <div class="mb-3">
+                <label for="trang_thai" class="form-label">Trạng thái</label>
+                <select id="trang_thai" name="trang_thai" class="form-select @error('trang_thai') is-invalid @enderror">
+                    <option value="1" {{ old('trang_thai') == '1' ? 'selected' : '' }}>Đang hoạt động</option>
+                    <option value="0" {{ old('trang_thai') == '0' ? 'selected' : '' }}>Dừng hoạt động</option>
+                </select>
+                @error('trang_thai')
+                    <p class="text-danger">{{ $message }}</p>
+                @enderror
+            </div>
             <div class="mb-3 d-flex justify-content-center">
                 <button type="reset" class="btn btn-outline-secondary me-3">Nhập lại</button>
                 <button type="submit" class="btn btn-success">Thêm mới</button>
             </div>
-            <a href="{{ route('khachhang.index') }}"><button type="button" class="btn btn-danger">Hủy</button></a>
+            <a href="{{ route('admins.khachhangs.index') }}"><button type="button" class="btn btn-danger">Hủy</button></a>
         </form>
     </div>
 @endsection

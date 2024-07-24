@@ -127,6 +127,6 @@
         </div>
 
         {{-- Hiển thị phân trang --}}
-        {{-- {{ $listSanPham->links('pagination::bootstrap-5') }} --}}
+        {{ $listSanPham->links('pagination::bootstrap-5') }}
     </div>
 @endsection

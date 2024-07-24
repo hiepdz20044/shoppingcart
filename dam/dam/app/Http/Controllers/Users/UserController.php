@@ -29,6 +29,9 @@ class UserController extends Controller
         $user->name = $validatedData['name'];
         $user->email = $validatedData['email'];
         $user->dia_chi = $validatedData['dia_chi'] ?? $user->dia_chi;
+        $user->ngay_sinh = $validatedData['ngay_sinh'];
+        $user->so_dien_thoai = $validatedData['so_dien_thoai'];
+        $user->gioi_tinh = $validatedData['gioi_tinh'];
 
         // Kiểm tra xem có file ảnh không
         if ($request->hasFile('hinh_anh')) {

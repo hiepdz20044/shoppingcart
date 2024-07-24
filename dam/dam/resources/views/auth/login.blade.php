@@ -1,141 +1,72 @@
 @extends('layouts.app')
 
 @section('css')
-<!-- Custom CSS -->
-<style>
-    .gradient-background {
-        background: linear-gradient(to right, #ebbcbc, #73a2ed);
-    }
-
-    .card {
-        border-radius: 15px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        /* Remove padding from the card if not needed */
-        padding: 0;
-    }
-
-    .card-body {
-        background: #ffffff;
-        border-radius: 15px;
-        padding: 2rem; /* Adjust padding if needed */
-    }
-
-    .btn-primary {
-        background-color: #2e8aec;
-        border: none;
-        border-radius: 30px;
-        padding: 10px 20px;
-        font-size: 1rem;
-    }
-
-    .btn-primary:hover {
-        background-color: #689ed7;
-    }
-
-    .text-primary {
-        color: #007bff;
-    }
-
-    .text-primary:hover {
-        color: #0056b3;
-    }
-
-    .form-label {
-        color: #333;
-        font-size: 0.875rem;
-    }
-
-    .invalid-feedback {
-        font-size: 0.875rem;
-    }
-
-    .form-outline {
-        position: relative;
-        margin-bottom: 1.5rem;
-    }
-
-    .form-outline input {
-        padding-left: 0.75rem;
-    }
-
-    .form-outline .form-label {
-        position: absolute;
-        top: 0;
-        left: 0.75rem;
-        font-size: 0.875rem;
-        transition: 0.2s;
-        transform: translateY(-50%);
-        background: #ffffff;
-        padding: 0 0.25rem;
-    }
-
-    .form-outline input:focus ~ .form-label,
-    .form-outline input:not(:placeholder-shown) ~ .form-label {
-        top: -0.75rem;
-        font-size: 0.75rem;
-        color: #007bff;
-    }
-</style>
 @endsection
 
 @section('content')
-<!-- Page Wrapper -->
-<div class="gradient-background d-flex align-items-center justify-content-center min-vh-100">
-    <div class="container d-flex align-items-center justify-content-center">
-        <div class="row w-100">
-            <div class="col-md-8 col-lg-6 col-xl-4 mx-auto">
-                <div class="card shadow-lg border-light rounded">
-                    <div class="card-body p-4 p-md-5">
-                        <a href="{{ url('/') }}" class="text-center d-block py-3">
-                            <img src="{{ asset('assets/admins/images/logos/dark-logo.svg') }}" width="180" alt="Logo">
-                        </a>
-                        <p class="text-center mb-4">Welcome Back! Please Login to Your Account</p>
-                        
-                        <form method="POST" action="{{ route('login') }}">
-                            @csrf
-
-                            <!-- Email Input -->
-                            <div class="form-outline mb-4">
-                                <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" placeholder=" " value="{{ old('email') }}" required>
-                                <label class="form-label" for="email">Email Address</label>
-                                @error('email')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+    <!-- Start login section -->
+    <div class="login__section section--padding">
+        <div class="container">
+            <div class="login__section--inner">
+                <div class="row row-cols-md-2 row-cols-1 justify-content-center">
+                    <div class="col-md-6">
+                        <div class="account__login">
+                            <div class="account__login--header mb-25">
+                                <h2 class="account__login--header__title h3 mb-10">Login</h2>
+                                <p class="account__login--header__desc">Login if you are a returning customer.</p>
                             </div>
-
-                            <!-- Password Input -->
-                            <div class="form-outline mb-4">
-                                <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" placeholder=" " required autocomplete="current-password">
-                                <label class="form-label" for="password">Password</label>
-                                @error('password')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                            <div class="account__login--inner">
+                                <form method="POST" action="{{ route('login') }}">
+                                    @csrf
+                                    <div class="account__login--inner">
+                                        <input class="account__login--input @error('email') is-invalid @enderror"
+                                            id="email" name="email" value="{{ old('email') }}"
+                                            placeholder="Email Addres" type="email">
+                                        @error('email')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                        <input class="account__login--input @error('password') is-invalid @enderror"
+                                            id="password" name="password" placeholder="Password" type="password">
+                                        @error('password')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                        <div
+                                            class="account__login--remember__forgot mb-15 d-flex justify-content-between align-items-center">
+                                            <div class="account__login--remember position__relative">
+                                                <input class="checkout__checkbox--input" id="check1" type="checkbox"
+                                                    {{ old('remember') ? 'checked' : '' }}>
+                                                <span class="checkout__checkbox--checkmark"></span>
+                                                <label class="checkout__checkbox--label login__remember--label"
+                                                    for="check1">
+                                                    Remember me</label>
+                                            </div>
+                                        </div>
+                                        <button class="account__login--btn primary__btn" type="submit">Login</button>
+                                        <div class="account__login--divide">
+                                            <span class="account__login--divide__text">OR</span>
+                                        </div>
+                                        <div class="account__social d-flex justify-content-center mb-15">
+                                            <a class="account__social--link facebook" target="_blank"
+                                                href="https://www.facebook.com/">Facebook</a>
+                                            <a class="account__social--link google" target="_blank"
+                                                href="https://www.google.com/">Google</a>
+                                            <a class="account__social--link twitter" target="_blank"
+                                                href="https://twitter.com/">Twitter</a>
+                                        </div>
+                                        <p class="account__login--signup__text">Don,t Have an Account? <a
+                                                href="{{ route('register') }}"><button type="submit">Sign up
+                                                    now</button></a>
+                                        </p>
+                                    </div>
+                                </form>
+                                <a href="{{ route('password.request') }}"><button class="account__login--forgot"
+                                    type="submit">Forgot Your Password?</button></a>
                             </div>
-
-                            <!-- Remember Me Checkbox -->
-                            <div class="d-flex align-items-center mb-4">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="remember" name="remember" {{ old('remember') ? 'checked' : '' }}>
-                                    <label class="form-check-label" for="remember">
-                                        Remember Me
-                                    </label>
-                                </div>
-                                <a class="ms-auto" href="{{ route('password.request') }}">Forgot Your Password?</a>
-                            </div>
-
-                            <!-- Submit Button -->
-                            <button type="submit" class="btn btn-primary w-100">Login</button>
-
-                            <!-- Register Link -->
-                            <div class="text-center mt-3">
-                                <p class="mb-0">Don't have an account?</p>
-                                <a class="text-primary fw-bold" href="{{ route('register') }}">Create one</a>
-                            </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+    <!-- End login section  -->
 @endsection

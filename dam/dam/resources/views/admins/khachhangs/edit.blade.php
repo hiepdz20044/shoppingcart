@@ -26,8 +26,7 @@
                 }, 5000);
             }
         });
-    </script>
-    <script>
+
         function showImage(event) {
             const img_user = document.getElementById('img_user');
             const file = event.target.files[0];
@@ -45,11 +44,10 @@
 
 @section('content')
     <div class="container mt-5">
-        <h2>{{ $title }}</h2>
-        <form action="{{ route('khachhang.update', $user->id) }}" method="POST" enctype="multipart/form-data">
+        <h2>Sửa thông tin khách hàng</h2>
+        <form action="{{ route('admins.khachhangs.update', $user->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
-
             <div class="mb-3">
                 <label for="name" class="form-label">Tên khách hàng</label>
                 <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name"
@@ -58,7 +56,6 @@
                     <p class="text-danger">{{ $message }}</p>
                 @enderror
             </div>
-
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
                 <input type="email" class="form-control @error('email') is-invalid @enderror" id="email"
@@ -67,7 +64,6 @@
                     <p class="text-danger">{{ $message }}</p>
                 @enderror
             </div>
-
             <div class="mb-3">
                 <label for="dia_chi" class="form-label">Địa chỉ</label>
                 <input type="text" class="form-control @error('dia_chi') is-invalid @enderror" id="dia_chi"
@@ -76,37 +72,62 @@
                     <p class="text-danger">{{ $message }}</p>
                 @enderror
             </div>
-
             <div class="mb-3">
                 <label for="hinh_anh" class="form-label">Hình ảnh</label>
-                <input type="file" class="form-control @error('hinh_anh') is-invalid @enderror" id="hinh_anh"
-                    name="hinh_anh" onchange="showImage(event)">
+                <input type="file" class="form-control @error('hinh_anh') is-invalid @enderror" id="hinh_anh" name="hinh_anh" onchange="showImage(event)">
                 @error('hinh_anh')
                     <p class="text-danger">{{ $message }}</p>
                 @enderror
+                <img id="img_user" src="{{ asset('storage/' . $user->hinh_anh) }}" alt="Hình ảnh khách hàng" style="width: 200px; display: block;">
             </div>
-
-            @if ($user->hinh_anh)
-                <img id="img_user" src="{{ asset('storage/' . $user->hinh_anh) }}" alt="Hình ảnh khách hàng"
-                    style="width: 200px;">
-            @else
-                <img id="img_user" src="#" alt="Hình ảnh khách hàng" style="width: 200px; display: none;">
-            @endif
-
             <div class="mb-3">
-                <label for="password" class="form-label">Mật khẩu</label>
-                <input type="password" class="form-control @error('password') is-invalid @enderror" id="password"
-                    name="password">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password">
                 @error('password')
                     <p class="text-danger">{{ $message }}</p>
                 @enderror
             </div>
-
+            <div class="mb-3">
+                <label for="ngay_sinh" class="form-label">Ngày sinh</label>
+                <input type="date" class="form-control @error('ngay_sinh') is-invalid @enderror" id="ngay_sinh"
+                    name="ngay_sinh" value="{{ old('ngay_sinh', $user->ngay_sinh) }}">
+                @error('ngay_sinh')
+                    <p class="text-danger">{{ $message }}</p>
+                @enderror
+            </div>
+            <div class="mb-3">
+                <label for="so_dien_thoai" class="form-label">Số điện thoại</label>
+                <input type="text" class="form-control @error('so_dien_thoai') is-invalid @enderror" id="so_dien_thoai" name="so_dien_thoai"
+                    value="{{ old('so_dien_thoai', $user->so_dien_thoai) }}">
+                @error('so_dien_thoai')
+                    <p class="text-danger">{{ $message }}</p>
+                @enderror
+            </div>
+            <div class="mb-3">
+                <label for="gioi_tinh" class="form-label">Giới tính</label>
+                <select id="gioi_tinh" name="gioi_tinh" class="form-select @error('gioi_tinh') is-invalid @enderror">
+                    <option value="Nam" {{ old('gioi_tinh', $user->gioi_tinh) == 'Nam' ? 'selected' : '' }}>Nam</option>
+                    <option value="Nữ" {{ old('gioi_tinh', $user->gioi_tinh) == 'Nữ' ? 'selected' : '' }}>Nữ</option>
+                </select>
+                @error('gioi_tinh')
+                    <p class="text-danger">{{ $message }}</p>
+                @enderror
+            </div>
+            <div class="mb-3">
+                <label for="trang_thai" class="form-label">Trạng thái</label>
+                <select id="trang_thai" name="trang_thai" class="form-select @error('trang_thai') is-invalid @enderror">
+                    <option value="1" {{ old('trang_thai', $user->trang_thai) == '1' ? 'selected' : '' }}>Đang hoạt động</option>
+                    <option value="0" {{ old('trang_thai', $user->trang_thai) == '0' ? 'selected' : '' }}>Dừng hoạt động</option>
+                </select>
+                @error('trang_thai')
+                    <p class="text-danger">{{ $message }}</p>
+                @enderror
+            </div>
             <div class="mb-3 d-flex justify-content-center">
                 <button type="reset" class="btn btn-outline-secondary me-3">Nhập lại</button>
                 <button type="submit" class="btn btn-success">Cập nhật</button>
             </div>
+            <a href="{{ route('admins.khachhangs.index') }}"><button type="button" class="btn btn-danger">Hủy</button></a>
         </form>
-        <a href="{{ route('khachhang.index') }}"><button type="button" class="btn btn-danger">Hủy</button></a>
     </div>
 @endsection

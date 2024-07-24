@@ -16,10 +16,14 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('hinh_anh');
+            $table->string('hinh_anh')->nullable();
             $table->string('dia_chi');
             $table->string('password');
+            $table->date('ngay_sinh')->nullable();
+            $table->string('so_dien_thoai')->nullable();
+            $table->enum('gioi_tinh', ['Nam', 'Nữ'])->default('Nam');
             $table->enum('role', ['Admin', 'User'])->default('User');
+            $table->boolean('trang_thai')->default(true);
             $table->rememberToken();
             $table->timestamps();
         });

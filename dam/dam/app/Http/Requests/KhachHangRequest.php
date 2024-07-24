@@ -23,30 +23,33 @@ class KhachHangRequest extends FormRequest
     {
         return [
             //
-            'name' => 'required|string|max:255', // Tên khách hàng, không vượt quá 255 ký tự
-            'email' => 'required|email|unique:users,email', // Email, phải là định dạng email hợp lệ và duy nhất trong bảng 'users'
-            'dia_chi' => 'nullable|string|max:255', // Địa chỉ, không bắt buộc và không vượt quá 255 ký tự
-            'hinh_anh' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Hình ảnh, không bắt buộc và phải là hình ảnh với kích thước tối đa 2MB
-            'password' => 'required|string|min:6', // Mật khẩu, phải có ít nhất 6 ký tự
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:khachhangs,email,' . $this->route('khachhang'),
+            'dia_chi' => 'nullable|string|max:255',
+            'hinh_anh' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'password' => 'required|string|min:8',
+            'ngay_sinh' => 'nullable|date',
+            'so_dien_thoai' => 'nullable|string|max:15',
+            'gioi_tinh' => 'required|in:Nam,Nữ',
+            'trang_thai' => 'required|boolean',
         ];
     }
     public function messages(): array
     {
         return [
             'name.required' => 'Tên khách hàng là bắt buộc.',
-            'name.string' => 'Tên khách hàng phải là chuỗi ký tự.',
-            'name.max' => 'Tên khách hàng không được vượt quá 255 ký tự.',
             'email.required' => 'Email là bắt buộc.',
-            'email.email' => 'Email phải là định dạng email hợp lệ.',
-            'email.unique' => 'Email đã được sử dụng.',
-            'dia_chi.string' => 'Địa chỉ phải là chuỗi ký tự.',
-            'dia_chi.max' => 'Địa chỉ không được vượt quá 255 ký tự.',
-            'hinh_anh.image' => 'Tập tin phải là hình ảnh.',
-            'hinh_anh.mimes' => 'Hình ảnh phải có định dạng jpeg, png, jpg, hoặc gif.',
-            'hinh_anh.max' => 'Hình ảnh không được vượt quá 2MB.',
+            'email.email' => 'Email không hợp lệ.',
+            'email.unique' => 'Email này đã được sử dụng.',
+            'hinh_anh.image' => 'File phải là một hình ảnh.',
+            'hinh_anh.mimes' => 'Hình ảnh phải có định dạng: jpeg, png, jpg, gif, svg.',
+            'hinh_anh.max' => 'Hình ảnh không được lớn hơn 2MB.',
             'password.required' => 'Mật khẩu là bắt buộc.',
-            'password.string' => 'Mật khẩu phải là chuỗi ký tự.',
-            'password.min' => 'Mật khẩu phải có ít nhất 6 ký tự.',
+            'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự.',
+            'gioi_tinh.required' => 'Giới tính là bắt buộc.',
+            'gioi_tinh.in' => 'Giới tính không hợp lệ.',
+            'trang_thai.required' => 'Trạng thái là bắt buộc.',
+            'trang_thai.boolean' => 'Trạng thái không hợp lệ.',
         ];
     }
 }

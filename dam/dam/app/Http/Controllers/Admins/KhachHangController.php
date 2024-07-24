@@ -46,30 +46,27 @@ class KhachHangController extends Controller
      */
     public function store(KhachHangRequest $request)
     {
-        //
         // Xử lý file hình ảnh
-        if ($request->hasFile('hinh_anh')) {
-            $imagePath = $request->file('hinh_anh')->store('images', 'public');
-        } else {
-            // Cung cấp tên file mặc định hoặc xử lý lỗi nếu không có ảnh
-            $imagePath = 'default.png'; // Thay đổi nếu cần thiết
-        }
-        if ($request->isMethod('post')) {
-            $params = $request->post();
-            $params['password'] = Hash::make($params['password']);
-            $params = $request->except('_token');
-            $params['hinh_anh'] = $imagePath;
-            // Lấy CSRF token từ request
-            $csrfToken = $request->input('_token');
-            // Gán CSRF token cho trường remember_token
-            $params['remember_token'] = $csrfToken;
-            // Gán ngày tạo cho trường created_at
-            $params['created_at'] = Carbon::now();
-            // Gán ngày cập nhật cho trường updated_at
-            $params['updated_at'] = Carbon::now();
-            $this->users->createProduct($params);
-            return redirect()->route('khachhang.index')->with('thongbao', 'Thêm khách hàng thành công');
-        }
+    if ($request->hasFile('hinh_anh')) {
+        $imagePath = $request->file('hinh_anh')->store('images', 'public');
+    } else {
+        // Cung cấp tên file mặc định hoặc xử lý lỗi nếu không có ảnh
+        $imagePath = 'default.png'; // Thay đổi nếu cần thiết
+    }
+
+    // Lấy tất cả các tham số ngoại trừ _token
+    $params = $request->except('_token');
+
+    // Mã hóa mật khẩu
+    $params['password'] = Hash::make($request->input('password'));
+
+    // Gán đường dẫn hình ảnh
+    $params['hinh_anh'] = $imagePath;
+
+    // Tạo khách hàng mới
+    User::create($params);
+
+    return redirect()->route('admins.khachhangs.index')->with('thongbao', 'Thêm khách hàng thành công');
     }
 
     /**
@@ -85,16 +82,14 @@ class KhachHangController extends Controller
      */
     public function edit(string $id)
     {
-        //
         $title = "Sửa thông tin khách hàng";
-        // Lấy thông tin chi tiết
-        // Sử dngj query builder
-        $user = $this->users->getUser($id);
-        // su dung eloquent
-        // $user = User::findOrFine($id); cai nay dang sai
+        // Lấy thông tin chi tiết sử dụng Eloquent
+        $user = User::find($id);
+        
         if (!$user) {
-            return redirect()->route('khachhang.index')->with('error', 'Không tìm thấy khách hàng');
+            return redirect()->route('admins.khachhangs.index')->with('error', 'Không tìm thấy khách hàng');
         }
+    
         return view('admins.khachhangs.edit', compact('title', 'user'));
     }
 
@@ -103,38 +98,44 @@ class KhachHangController extends Controller
      */
     public function update(KhachHangRequest $request, string $id)
     {
-        // Kiểm tra phương thức PUT
-        if ($request->isMethod('PUT')) {
-            // Lấy người dùng hoặc báo lỗi nếu không tìm thấy
-            $user = KhachHang::findOrFail($id);
+         // Kiểm tra phương thức PUT
+    if ($request->isMethod('PUT')) {
+        // Lấy người dùng hoặc báo lỗi nếu không tìm thấy
+        $user = KhachHang::findOrFail($id);
 
-            // Lấy tất cả các tham số ngoại trừ _token và _method
-            $params = $request->except('_token', '_method');
+        // Lấy tất cả các tham số ngoại trừ _token và _method
+        $params = $request->except('_token', '_method');
 
-            // Xử lý hình ảnh
-            if ($request->hasFile('hinh_anh')) {
-                // Xóa hình cũ nếu có
-                if ($user->hinh_anh) {
-                    Storage::disk('public')->delete($user->hinh_anh);
-                }
-                // Lưu hình mới
-                $params['hinh_anh'] = $request->file('hinh_anh')->store('images/', 'public');
-            } else {
-                // Giữ hình cũ nếu không có hình mới
-                $params['hinh_anh'] = $user->hinh_anh;
+        // Xử lý hình ảnh
+        if ($request->hasFile('hinh_anh')) {
+            // Xóa hình cũ nếu có
+            if ($user->hinh_anh) {
+                Storage::disk('public')->delete($user->hinh_anh);
             }
-
-            // Cập nhật dữ liệu người dùng
-            $params['password'] = Hash::make($params['password']);
-
-            $user->update($params);
-
-            // Redirect với thông báo thành công
-            return redirect()->route('khachhang.index')->with('thongbao', 'Cập nhật khách hàng thành công');
+            // Lưu hình mới
+            $params['hinh_anh'] = $request->file('hinh_anh')->store('images', 'public');
+        } else {
+            // Giữ hình cũ nếu không có hình mới
+            $params['hinh_anh'] = $user->hinh_anh;
         }
 
-        // Nếu không phải PUT, trả về trang lỗi
-        return redirect()->route('khachhang.index')->with('error', 'Yêu cầu không hợp lệ.');
+        // Kiểm tra nếu mật khẩu không rỗng thì mã hóa mật khẩu
+        if (!empty($params['password'])) {
+            $params['password'] = Hash::make($params['password']);
+        } else {
+            // Giữ mật khẩu cũ nếu không có thay đổi
+            unset($params['password']);
+        }
+
+        // Cập nhật dữ liệu người dùng
+        $user->update($params);
+
+        // Redirect với thông báo thành công
+        return redirect()->route('admins.khachhangs.index')->with('thongbao', 'Cập nhật khách hàng thành công');
+    }
+
+    // Nếu không phải PUT, trả về trang lỗi
+    return redirect()->route('admins.khachhangs.index')->with('error', 'Yêu cầu không hợp lệ.');
     }
 
     /**
@@ -156,7 +157,7 @@ class KhachHangController extends Controller
             // Xóa sản phẩm khỏi cơ sở dữ liệu
             DB::table('users')->where('id', $id)->delete();
 
-            return redirect()->route('khachhang.index')->with('thongbao', 'Khách hàng đã được xóa thành công');
+            return redirect()->route('admins.khachhangs.index')->with('thongbao', 'Khách hàng đã được xóa thành công');
         }
 
         return redirect()->route('sanpham.index')->with('thongbao', 'Khách hàng không tồn tại');

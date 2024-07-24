@@ -32,7 +32,7 @@ class SanPhamController extends Controller
         // lay du lieu cu form tim kiem
         // $search = $request->input('search');
         // $searchTrangThai= $request->input('searchTrangThai');
-        $listSanPham = SanPham::orderByDesc('trang_thai')->get();
+        $listSanPham = SanPham::orderByDesc('trang_thai')->paginate('2');
         // ->when($search, function ($query, $search) {
         //     return $query->where("ten_san_pham", "like", "%{$search}%");
         // })
@@ -112,7 +112,6 @@ class SanPhamController extends Controller
         $title = "Sửa sản phẩm";
         // Lấy thông tin chi tiết của sản phẩm
         $listSanPham = $this->san_phams->getListSp($id);
-
         if (!$listSanPham) {
             return redirect()->route('sanpham.index')->with('error', 'Không tìm thấy sản phẩm');
         }
@@ -177,9 +176,9 @@ class SanPhamController extends Controller
                 // if ($sanPham->hinh_anh && Storage::disk('public')->exists($sanPham->hinh_anh)) {
                 //     Storage::disk('public')->delete($sanPham->hinh_anh);
                 // }
-                return redirect()->route('sanpham.index')->with('thongbao', 'Sản phẩm đã được xóa thành công');
+                return redirect()->route('admins.sanphams.index')->with('thongbao', 'Sản phẩm đã được xóa thành công');
             }
-            return redirect()->route('sanpham.index')->with('thongbao', 'Sản phẩm không tồn tại');
+            return redirect()->route('admins.sanphams.index')->with('thongbao', 'Sản phẩm không tồn tại');
         }
         // khi xoa mem se su dung eloquent (xoa mem thi khong xoa anh)
         // mot so ham can nho khi lam viec voi xoa mem

@@ -26,5 +26,15 @@ class KhachHang extends Model
     // cach 3: si dung eloquent
     protected $table = 'users';
 
-    protected $fillable = ['name', 'email', 'hinh_anh', 'email_verified_at', 'dia_chi', 'remember_token'];
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'dia_chi',
+        'hinh_anh',
+        'ngay_sinh',
+        'so_dien_thoai',
+        'gioi_tinh',
+        'trang_thai',
+    ];
 }

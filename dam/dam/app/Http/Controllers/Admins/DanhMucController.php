@@ -58,7 +58,6 @@ class DanhMucController extends Controller
                 $imagePath = null; // Thay đổi nếu cần thiết
             }
             $params['hinh_anh'] = $imagePath;
-            // Gán ngày tạo cho trường created_at
             DanhMuc::create($params);
             return redirect()->route('admins.danhmucs.index')->with('thongbao', 'Thêm danh mục thành công');
         }
