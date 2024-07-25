@@ -6,6 +6,7 @@ use App\Http\Controllers\Admins\KhachHangController;
 use App\Http\Controllers\Admins\SanPhamController;
 use App\Http\Controllers\Auths\AuthController;
 use App\Http\Controllers\Auths\UserController;
+use App\Http\Controllers\Clients\CheckoutController;
 use App\Http\Controllers\Clients\HomeController as ClientsHomeController;
 use App\Http\Controllers\Users\UserController as UsersUserController;
 use App\Http\Middleware\CheckRoleAdminMiddleware;
@@ -23,8 +24,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('clients.index');
+Route::get('/home', function () {
+    return view('clients.home.index');
 });
 // Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard')->middleware(['auth','auth.admin']);
 // Route::get('/login', [AuthController::class, 'showFormLogin']);
@@ -37,6 +38,11 @@ Route::get('/', function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [UsersUserController::class, 'show'])->name('profile');
     Route::put('/profile', [UsersUserController::class, 'update'])->name('profile.update');
+    Route::get('cart', [CheckoutController::class, 'index'])->name('cart');
+    Route::get('one', [CheckoutController::class, 'one'])->name('one');
+    Route::get('two', [CheckoutController::class, 'two'])->name('two');
+    Route::get('three', [CheckoutController::class, 'three'])->name('three');
+    Route::get('details{id}', [ClientsHomeController::class, 'details'])->name('details');
 
     // Route::middleware(['auth.admin'])->group(function () {
     //     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
@@ -66,8 +72,8 @@ Route::middleware(['auth', 'auth.admin'])->prefix('admins')
                 Route::put('/update/{id}', [DanhMucController::class, 'update'])->name('update');
                 Route::delete('/delete/{id}', [DanhMucController::class, 'destroy'])->name('destroy');
             });
-            // Route san pham
-            Route::prefix('sanphams')
+        // Route san pham
+        Route::prefix('sanphams')
             ->as('sanphams.')
             ->group(function () {
                 Route::get('/', [SanPhamController::class, 'index'])->name('index');
@@ -78,8 +84,8 @@ Route::middleware(['auth', 'auth.admin'])->prefix('admins')
                 Route::put('/update/{id}', [SanPhamController::class, 'update'])->name('update');
                 Route::delete('/delete/{id}', [SanPhamController::class, 'destroy'])->name('destroy');
             });
-            // Route khach hang
-            Route::prefix('khachhangs')
+        // Route khach hang
+        Route::prefix('khachhangs')
             ->as('khachhangs.')
             ->group(function () {
                 Route::get('/', [KhachHangController::class, 'index'])->name('index');

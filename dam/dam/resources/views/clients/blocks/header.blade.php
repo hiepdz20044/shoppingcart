@@ -628,7 +628,7 @@
                         class="minicart__conditions--link" href="privacy-policy.html">Privacy and Policy</a></label>
             </div>
             <div class="minicart__button d-flex justify-content-center">
-                <a class="primary__btn minicart__button--link" href="cart.html">View cart</a>
+                <a class="primary__btn minicart__button--link" href="{{ route('cart') }}">View cart</a>
                 <a class="primary__btn minicart__button--link" href="checkout.html">Checkout</a>
             </div>
         </div>
